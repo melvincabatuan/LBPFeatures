@@ -6,7 +6,7 @@
 #include <limits>
 
 #include "opencv2/core/core.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
+//#include "opencv2/imgproc/imgproc.hpp"
 
 using namespace std;
 using namespace cv;
@@ -62,7 +62,14 @@ Mat getLBP(Mat img){
 }
 
 
-Mat *pLBP = NULL;
+
+/// 16.7 fps ave. after 500 frames using Mat pointer
+//Mat *pLBP = NULL;
+
+
+/// 17.2 fps ave. after 500 frames using just Mat
+Mat LBP;
+vector<Mat> channels;
 
 /*
  * Class:     com_cabatuan_lbpfeatures_MainActivity
@@ -89,26 +96,40 @@ JNIEXPORT void JNICALL Java_com_cabatuan_lbpfeatures_MainActivity_predict
 
 /***********************************************************************************************/
     /// Native Image Processing HERE... 
-    if(DEBUG){
-      LOGI("Starting native image processing...");
-    }
 
+/*
     if(pLBP == NULL)
          pLBP = new Mat(srcGray.size(), srcGray.type());
     
     Mat LBP = *pLBP;
-    LBP = getLBP(srcGray);
+*/
 
+    if (LBP.empty())
+        LBP.create(srcGray.size(), srcGray.type());
+    
+    LBP = getLBP(srcGray);
+    
+    
+    
+    channels.push_back(Mat::zeros(srcGray.size(), srcGray.type()));  // B
+    channels.push_back(LBP);                                         // G
+    channels.push_back(Mat::zeros(srcGray.size(), srcGray.type()));  // R
+    channels.push_back((Mat::ones(srcGray.size(), srcGray.type())) * 255);  
+                                                                 // A 
+                                       // transparent = 0, opaque = 255                             
+    
+    merge(channels, mbgra); // FAST: almost 20 fps ave. after 500 frames
+
+    
 
  /// Display to Android
-     cvtColor(LBP, mbgra, CV_GRAY2BGRA);
+ /// cvtColor(LBP, mbgra, CV_GRAY2BGRA);
 
-
-    if(DEBUG){
-      LOGI("Successfully finished native image processing...");
-    }
-   
+ 
 /************************************************************************************************/ 
+   
+   /// Clear the vector (or it will accumulate!!!)
+   channels.clear();
    
    /// Release Java byte buffer and unlock backing bitmap
    pEnv-> ReleasePrimitiveArrayCritical(pSource,source,0);

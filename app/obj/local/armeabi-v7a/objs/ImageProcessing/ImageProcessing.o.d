@@ -68,11 +68,7 @@
  /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/core/core_c.h \
  /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/core/types_c.h \
  /home/cobalt/Android/adt-bundle-linux-x86-20131030/android-ndk-r10d/platforms/android-15/arch-arm/usr/include/assert.h \
- /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/core/optim.hpp \
- /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/imgproc.hpp \
- /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc.hpp \
- /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/imgproc_c.h \
- /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/types_c.h
+ /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/core/optim.hpp
 
 /home/cobalt/AndroidStudioProjects/LBPFeatures/app/jni/com_cabatuan_lbpfeatures_MainActivity.h:
 
@@ -211,11 +207,3 @@
 /home/cobalt/Android/adt-bundle-linux-x86-20131030/android-ndk-r10d/platforms/android-15/arch-arm/usr/include/assert.h:
 
 /home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/core/optim.hpp:
-
-/home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/imgproc.hpp:
-
-/home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc.hpp:
-
-/home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/imgproc_c.h:
-
-/home/cobalt/Android/OpenCV-android-sdk/sdk/native/jni/include/opencv2/imgproc/types_c.h:

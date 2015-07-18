@@ -34,6 +34,8 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
     final boolean LOG_FRAME_RATE = true;
     private boolean bProcessing = false;
     private Handler mHandler=new Handler(Looper.getMainLooper());
+    private double current_fps;
+    private double total_fps; // for average frame rate computation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +81,17 @@ public class MainActivity extends Activity implements TextureView.SurfaceTexture
             i++;
             now = System.nanoTime() / 1000;
             if (i > 3) {
-                Log.d("onPreviewFrame: ", "Measured: " + 1000000L / (now - oldnow) + " fps.");
+                current_fps = (float)1000000L / (now - oldnow);
+                Log.d("onPreviewFrame: ", "Measured: " + current_fps + " fps.");
+                total_fps += current_fps;
                 count++;
+
+                if(count%10 == 0){ // Log average every 10 frames
+                    Log.d("onPreviewFrame: ", "AVERAGE: " + total_fps/count + " fps after " + count +" frames." );
+                }
             }
+
+
             oldnow = now;
         }
 
