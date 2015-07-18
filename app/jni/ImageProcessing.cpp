@@ -69,7 +69,12 @@ Mat getLBP(Mat img){
 
 /// 17.2 fps ave. after 500 frames using just Mat
 Mat LBP;
+
+// FAST: almost 20 fps ave. after 500 frames
 vector<Mat> channels;
+
+// Slower at 16.1 fps?
+// Mat *channels = NULL;
 
 /*
  * Class:     com_cabatuan_lbpfeatures_MainActivity
@@ -97,31 +102,45 @@ JNIEXPORT void JNICALL Java_com_cabatuan_lbpfeatures_MainActivity_predict
 /***********************************************************************************************/
     /// Native Image Processing HERE... 
 
-/*
-    if(pLBP == NULL)
-         pLBP = new Mat(srcGray.size(), srcGray.type());
-    
-    Mat LBP = *pLBP;
-*/
-
     if (LBP.empty())
         LBP.create(srcGray.size(), srcGray.type());
     
-    LBP = getLBP(srcGray);
+    LBP = getLBP(srcGray); 
     
+    Mat White(srcGray.size(), srcGray.type(), Scalar(255));
     
+    /*
+    channels.push_back(LBP);  // B
+    channels.push_back(LBP);    // G
+    channels.push_back(LBP);  // R
+    channels.push_back(White); 
+    */ 
+      
+    /*  NICE PINK */
+    channels.push_back(White);  // B
+    channels.push_back(LBP);    // G
+    channels.push_back(White);  // R
+    channels.push_back(White);  
+                                // A 
     
-    channels.push_back(Mat::zeros(srcGray.size(), srcGray.type()));  // B
-    channels.push_back(LBP);                                         // G
-    channels.push_back(Mat::zeros(srcGray.size(), srcGray.type()));  // R
-    channels.push_back((Mat::ones(srcGray.size(), srcGray.type())) * 255);  
-                                                                 // A 
                                        // transparent = 0, opaque = 255                             
     
     merge(channels, mbgra); // FAST: almost 20 fps ave. after 500 frames
-
     
-
+   /* 
+    if (channels == NULL)
+        channels = new Mat[4];
+        
+    //Mat A(srcGray.size(), srcGray.type(), Scalar(255));
+    
+    channels[0] = LBP; 										   // R
+	channels[1] = Mat::zeros(srcGray.size(), srcGray.type());  // G
+    channels[2] = Mat::zeros(srcGray.size(), srcGray.type());  // B
+	channels[3] = LBP;
+	
+	merge(channels, 4, mbgra);
+    */
+    
  /// Display to Android
  /// cvtColor(LBP, mbgra, CV_GRAY2BGRA);
 
