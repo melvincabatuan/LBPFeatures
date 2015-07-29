@@ -62,6 +62,42 @@ Mat getLBP(Mat img){
 }
 
 
+// About the same fps 16.7 ave. after 500 frames 
+Mat getLBP_pointer(const Mat &img){
+
+    CV_Assert(img.depth() == CV_8U); // accept only uchar images
+
+    Mat dst = Mat::zeros(img.size(), img.type());
+
+    for(  int j=1; j<img.rows-1; j++) {
+    
+        const uchar* previous = img.ptr<const uchar>(j-1); // previous row
+        const uchar* current  = img.ptr<const uchar>(j);   // current row 
+        const uchar* next     = img.ptr<const uchar>(j+1); // next row
+        
+        uchar* output          = dst.ptr<uchar>(j); // output row       
+        
+        for(int i = 1;i < img.cols-1; i++) {
+            
+            const uchar center = img.ptr<const uchar>(j)[i];
+            
+            uchar code = 0;
+
+            code |= ((previous[i-1]) > center) << 7;
+            code |= ((previous[i])   > center) << 6;
+            code |= ((previous[i+1]) > center) << 5;
+            code |= ((current[i+1])  > center) << 4;
+            code |= ((next[i+1])     > center) << 3;
+            code |= ((next[i])       > center) << 2;
+            code |= ((next[i-1])     > center) << 1;
+            code |= ((current[i-1])  > center) << 0;
+            
+            *output++ = code;
+        }
+    }
+    return dst;
+}
+
 
 /// 16.7 fps ave. after 500 frames using Mat pointer
 //Mat *pLBP = NULL;
@@ -105,13 +141,13 @@ JNIEXPORT void JNICALL Java_com_cabatuan_lbpfeatures_MainActivity_predict
     if (LBP.empty())
         LBP.create(srcGray.size(), srcGray.type());
     
-    LBP = getLBP(srcGray); 
+    LBP = getLBP_pointer(srcGray); 
     
     Mat White(srcGray.size(), srcGray.type(), Scalar(255));
     
     /*
     channels.push_back(LBP);  // B
-    channels.push_back(LBP);    // G
+    channels.push_back(LBP);  // G
     channels.push_back(LBP);  // R
     channels.push_back(White); 
     */ 
